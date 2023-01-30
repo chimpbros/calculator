@@ -18,6 +18,15 @@ function operate(operator, a, b){
     return operator(a, b);
 }
 
+function operationEvent(operator){
+    if(numInput){
+        secondaryScreen.textContent = `${numInput} ${divideBtn.textContent}`;
+        num1 = parseFloat(numInput);
+        numInput = null;
+        operation = divide;
+    }
+}
+
 const primaryScreen = document.querySelector('.primary');
 const secondaryScreen= document.querySelector('.secondary');
 const btnNum = document.querySelectorAll('.btn.num');
@@ -96,6 +105,6 @@ equalsBtn.addEventListener('click', () => {
         num2 = parseFloat(numInput);
         result = operate(operation, num1, num2);
         primaryScreen.textContent = result;
-        numInput = null;
+        numInput = result;
     }
 });
