@@ -18,12 +18,25 @@ function operate(operator, a, b){
     return operator(a, b);
 }
 
-function operationEvent(operator){
+function operationEvent(operator, btn){
     if(numInput){
-        secondaryScreen.textContent = `${numInput} ${divideBtn.textContent}`;
+        secondaryScreen.textContent = `${numInput} ${btn.textContent}`;
         num1 = parseFloat(numInput);
         numInput = null;
-        operation = divide;
+        operation = operator;
+    }
+}
+
+function equals(){
+    if(num1){
+        secondaryScreen.textContent += ` ${numInput} =`;
+        num2 = parseFloat(numInput);
+        result = operate(operation, num1, num2);
+        primaryScreen.textContent = result;
+        numInput = result;
+    }
+    else if(num2){
+        secondaryScreen.textContent = `${numInput} `
     }
 }
 
@@ -63,39 +76,19 @@ del.addEventListener('click', () => {
 });
 
 divideBtn.addEventListener('click', () => {
-        if(numInput){
-            secondaryScreen.textContent = `${numInput} ${divideBtn.textContent}`;
-            num1 = parseFloat(numInput);
-            numInput = null;
-            operation = divide;
-        }
+        operationEvent(divide, divideBtn);
 });
 
 multiplyBtn.addEventListener('click', () => {
-    if(numInput){
-        secondaryScreen.textContent = `${numInput} ${multiplyBtn.textContent}`;
-        num1 = parseFloat(numInput);
-        numInput = null;
-        operation = multiply;
-    }
+    operationEvent(multiply, multiplyBtn);
 });
 
 subtractBtn.addEventListener('click', () => {
-    if(numInput){
-        secondaryScreen.textContent = `${numInput} ${subtractBtn.textContent}`;
-        num1 = parseFloat(numInput);
-        numInput = null;
-        operation = subtract;
-    }
+    operationEvent(subtract, subtractBtn);
 });
 
 addBtn.addEventListener('click', () => {
-    if(numInput){
-        secondaryScreen.textContent = `${numInput} ${addBtn.textContent}`;
-        num1 = parseFloat(numInput);
-        numInput = null;
-        operation = add;
-    }
+    operationEvent(add, addBtn);
 });
 
 
