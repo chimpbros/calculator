@@ -1,103 +1,159 @@
 function add(a, b){
-    return a + b;
+    return parseFloat(a) + parseFloat(b);
 }
 
 function subtract(a, b){
-    return a - b;
+    return parseFloat(a) - parseFloat(b);
 }
 
 function multiply(a, b){
-    return a * b;
+    return parseFloat(a) * parseFloat(b);
 }
 
 function divide(a, b){
-    return a / b;
+    return parseFloat(a) / parseFloat(b);
 }
 
 function operate(operator, a, b){
-    return operator(a, b);
+    switch(operator) {
+        case 'add':
+            return add(a, b);
+        case 'subtract':
+            return subtract(a, b);
+        case 'multiply':
+            return subtract(a, b);
+        case 'divide':
+            return divide(a, b);
+    }
 }
 
 function operationEvent(operator, btn){
-    if(numInput){
+    process = true;
+    if(numInput && process){
         secondaryScreen.textContent = `${numInput} ${btn.textContent}`;
-        num1 = parseFloat(numInput);
-        numInput = null;
         operation = operator;
+        if(!num2){
+            num1 = parseFloat(numInput);
+        } else{
+            result = operate(operation, num1, num2);
+            num1 = result;
+            num2 = parseFloat(numInput);
+            primaryScreen.textContent = result;
+        }
+        numInput = null;
     }
 }
 
 function equals(){
-    if(num1){
+    if(process){
         secondaryScreen.textContent += ` ${numInput} =`;
         num2 = parseFloat(numInput);
         result = operate(operation, num1, num2);
         primaryScreen.textContent = result;
         numInput = result;
-    }
-    else if(num2){
-        secondaryScreen.textContent = `${numInput} `
+        process = false;
     }
 }
 
 const primaryScreen = document.querySelector('.primary');
 const secondaryScreen= document.querySelector('.secondary');
-const btnNum = document.querySelectorAll('.btn.num');
-let num1, num2, operation, result;
-let numInput = null;
-const clear = document.querySelector('#clear');
-const del = document.querySelector('#del');
-const divideBtn = document.querySelector('#divide');
-const multiplyBtn = document.querySelector('#multiply');
-const subtractBtn = document.querySelector('#subtract');
-const addBtn = document.querySelector('#add');
-const equalsBtn = document.querySelector('#equals');
-btnNum.forEach(btn => btn.addEventListener('click', function(){
-    let clickedVal = this.textContent;
-    if(!numInput){
-        numInput = clickedVal;
-    } else{
-        numInput += clickedVal;
+const btnGrid = document.querySelector('.btn-grid');
+const operator = ['add', 'multiply', 'divide', 'subtract'];
+let numInput, operation;
+
+btnGrid.addEventListener('click', e => {
+    if(e.target.matches('button')){
+        const key = e.target;
+        const action = key.dataset.action;
+        const keyContent = key.textContent;
+        const displayedNum = primaryScreen.textContent;
+        const previousKey = btnGrid.dataset.previousKeyType;
+        let num1, num2;
+        // when user click number button
+        if(!action){
+            if(displayedNum === '0' || previousKey === 'operator'){
+                primaryScreen.textContent = keyContent;
+            } else{
+                primaryScreen.textContent += keyContent;
+            }
+            btnGrid.dataset.previousKeyType = 'number';
+        }
+        // when user click operator button
+        if(operator.includes(action)){
+            secondaryScreen.textContent = displayedNum + ' ' + keyContent;
+            btnGrid.dataset.previousKeyType = 'operator';
+            numInput = displayedNum;
+            operation = action;
+        }
+        if(action === 'decimal'){
+            if(!displayedNum.includes('.')){
+                primaryScreen.textContent = displayedNum + '.';
+            }
+            if(previousKey === 'operator'){
+                primaryScreen.textContent = '0.';
+            }
+            btnGrid.dataset.previousKeyType = 'decimal';
+        }
+        if(action === 'del'){
+        
+        }
+        if(action === 'clear'){
+            primaryScreen.textContent = '0';
+            secondaryScreen.textContent = '';
+        }
+        if(action === 'percent'){
+            console.log('percent');
+        }
+        if(action === 'equals'){
+            // calculate result when previous data key is not equals and operation not null
+            if(previousKey != 'equals' && operation){
+                num1 = numInput;
+                num2 = displayedNum;
+                primaryScreen.textContent = operate(operation, num1, num2);
+            }
+            btnGrid.dataset.previousKeyType = 'equals';
+            operation = null;
+        }
     }
-    primaryScreen.textContent = numInput;
-}));
-
-clear.addEventListener('click', () => {
-    numInput = null;
-    primaryScreen.textContent = 0;
-    secondaryScreen.textContent = numInput;
 });
+// btnNum.forEach(btn => btn.addEventListener('click', function(){
+//     let clickedVal = this.textContent;
+//     if(!numInput){
+//         numInput = clickedVal;
+//     } else{
+//         numInput += clickedVal;
+//     }
+//     primaryScreen.textContent = numInput;
+// }));
 
-del.addEventListener('click', () => {
-    if(numInput){
-        numInput = numInput.slice(0, -1);
-        primaryScreen.textContent = numInput;
-    }
-});
+// clear.addEventListener('click', () => {
+//     numInput = null;
+//     primaryScreen.textContent = 0;
+//     secondaryScreen.textContent = numInput;
+// });
 
-divideBtn.addEventListener('click', () => {
-        operationEvent(divide, divideBtn);
-});
+// del.addEventListener('click', () => {
+//     if(numInput){
+//         numInput = numInput.slice(0, -1);
+//         primaryScreen.textContent = numInput;
+//     }
+// });
 
-multiplyBtn.addEventListener('click', () => {
-    operationEvent(multiply, multiplyBtn);
-});
+// divideBtn.addEventListener('click', () => {
+//         operationEvent(divide, divideBtn);
+// });
 
-subtractBtn.addEventListener('click', () => {
-    operationEvent(subtract, subtractBtn);
-});
+// multiplyBtn.addEventListener('click', () => {
+//     operationEvent(multiply, multiplyBtn);
+// });
 
-addBtn.addEventListener('click', () => {
-    operationEvent(add, addBtn);
-});
+// subtractBtn.addEventListener('click', () => {
+//     operationEvent(subtract, subtractBtn);
+// });
+
+// addBtn.addEventListener('click', () => {
+//     operationEvent(add, addBtn);
+// });
 
 
-equalsBtn.addEventListener('click', () => {
-    if(num1){
-        secondaryScreen.textContent += ` ${numInput} =`;
-        num2 = parseFloat(numInput);
-        result = operate(operation, num1, num2);
-        primaryScreen.textContent = result;
-        numInput = result;
-    }
-});
+// equalsBtn.addEventListener('click', equals);
