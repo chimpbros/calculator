@@ -2,6 +2,7 @@ body{
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    background-color: #ECE4DB;
 }
 
 .btn {
@@ -10,7 +11,8 @@ body{
     border: none;
     background: none;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 1.5rem;
+    transition: background 200ms;
 }
 
 img {
@@ -26,7 +28,7 @@ img {
 }
 
 .container {
-    width: 250px;
+    width: 300px;
     border: 4px solid #FEC89A;
     padding: 10px;
     border-radius: 20px;
@@ -47,12 +49,13 @@ img {
 }
 
 .primary {
-    height: 4rem;
+    height: 5rem;
     background-color: #FEC5BB;
     border-radius: 10px;
     box-shadow: 0 5px #FCD5CE;
     margin-bottom: 10px;
     padding: 10px;
+    font-size: 3rem;
 }
 
 .screen {
@@ -74,4 +77,8 @@ img {
     background-size: 20px;
     background-position: center;
     background-repeat: no-repeat;
+}
+
+.btn:hover {
+    background-color: #FAE1DD;
 }

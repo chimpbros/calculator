@@ -27,34 +27,6 @@ function operate(operator, a, b){
     }
 }
 
-function operationEvent(operator, btn){
-    process = true;
-    if(numInput && process){
-        secondaryScreen.textContent = `${numInput} ${btn.textContent}`;
-        operation = operator;
-        if(!num2){
-            num1 = parseFloat(numInput);
-        } else{
-            result = operate(operation, num1, num2);
-            num1 = result;
-            num2 = parseFloat(numInput);
-            primaryScreen.textContent = result;
-        }
-        numInput = null;
-    }
-}
-
-function equals(){
-    if(process){
-        secondaryScreen.textContent += ` ${numInput} =`;
-        num2 = parseFloat(numInput);
-        result = operate(operation, num1, num2);
-        primaryScreen.textContent = result;
-        numInput = result;
-        process = false;
-    }
-}
-
 const primaryScreen = document.querySelector('.primary');
 const secondaryScreen= document.querySelector('.secondary');
 const btnGrid = document.querySelector('.btn-grid');
@@ -83,14 +55,14 @@ btnGrid.addEventListener('click', e => {
             const operator = btnGrid.dataset.operator;
             const num1 = numInput;
             const num2 = displayedNum;
-            if(num1 && operator){
+            if((num1 && operator) && previousKey === 'number'){
                 numInput = operate(operator, num1, num2);
-                primaryScreen.textContent = numInput;
+                primaryScreen.textContent = Math.round(numInput * 100000000) / 100000000;
             }
             btnGrid.dataset.operator = action;
-            numInput = displayedNum;
+            numInput = primaryScreen.textContent;
             operation = action;
-            secondaryScreen.textContent = displayedNum + ' ' + keyContent;
+            secondaryScreen.textContent = primaryScreen.textContent + ' ' + keyContent;
         }
         if(action === 'decimal'){
             if(!displayedNum.includes('.')){
@@ -122,54 +94,15 @@ btnGrid.addEventListener('click', e => {
         }
         if(action === 'equals'){
             // calculate result when previous data key is not equals and operation not null
+            let result;
             if(previousKey != 'equals' && operation){
                 const num1 = numInput;
                 const num2 = displayedNum;
-                primaryScreen.textContent = operate(operation, num1, num2);
+                result = operate(operation, num1, num2);
+                primaryScreen.textContent = Math.round(result * 100000000) / 100000000;
             }
             btnGrid.dataset.previousKeyType = 'equals';
             operation = null;
         }
     }
 });
-// btnNum.forEach(btn => btn.addEventListener('click', function(){
-//     let clickedVal = this.textContent;
-//     if(!numInput){
-//         numInput = clickedVal;
-//     } else{
-//         numInput += clickedVal;
-//     }
-//     primaryScreen.textContent = numInput;
-// }));
-
-// clear.addEventListener('click', () => {
-//     numInput = null;
-//     primaryScreen.textContent = 0;
-//     secondaryScreen.textContent = numInput;
-// });
-
-// del.addEventListener('click', () => {
-//     if(numInput){
-//         numInput = numInput.slice(0, -1);
-//         primaryScreen.textContent = numInput;
-//     }
-// });
-
-// divideBtn.addEventListener('click', () => {
-//         operationEvent(divide, divideBtn);
-// });
-
-// multiplyBtn.addEventListener('click', () => {
-//     operationEvent(multiply, multiplyBtn);
-// });
-
-// subtractBtn.addEventListener('click', () => {
-//     operationEvent(subtract, subtractBtn);
-// });
-
-// addBtn.addEventListener('click', () => {
-//     operationEvent(add, addBtn);
-// });
-
-
-// equalsBtn.addEventListener('click', equals);
