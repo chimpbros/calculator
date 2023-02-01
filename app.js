@@ -21,7 +21,7 @@ function operate(operator, a, b){
         case 'subtract':
             return subtract(a, b);
         case 'multiply':
-            return subtract(a, b);
+            return multiply(a, b);
         case 'divide':
             return divide(a, b);
     }
@@ -95,7 +95,12 @@ btnGrid.addEventListener('click', e => {
             btnGrid.dataset.previousKeyType = 'decimal';
         }
         if(action === 'del'){
-        
+            if(displayedNum.length <= 1){
+                primaryScreen.textContent = '0';
+            } else{
+                let newDisplay = displayedNum.slice(0, -1);
+                primaryScreen.textContent = newDisplay;
+            }
         }
         if(action === 'clear'){
             primaryScreen.textContent = '0';
