@@ -68,7 +68,6 @@ btnGrid.addEventListener('click', e => {
         const keyContent = key.textContent;
         const displayedNum = primaryScreen.textContent;
         const previousKey = btnGrid.dataset.previousKeyType;
-        let num1, num2;
         // when user click number button
         if(!action){
             if(displayedNum === '0' || previousKey === 'operator'){
@@ -80,10 +79,18 @@ btnGrid.addEventListener('click', e => {
         }
         // when user click operator button
         if(operator.includes(action)){
-            secondaryScreen.textContent = displayedNum + ' ' + keyContent;
             btnGrid.dataset.previousKeyType = 'operator';
+            const operator = btnGrid.dataset.operator;
+            const num1 = numInput;
+            const num2 = displayedNum;
+            if(num1 && operator){
+                numInput = operate(operator, num1, num2);
+                primaryScreen.textContent = numInput;
+            }
+            btnGrid.dataset.operator = action;
             numInput = displayedNum;
             operation = action;
+            secondaryScreen.textContent = displayedNum + ' ' + keyContent;
         }
         if(action === 'decimal'){
             if(!displayedNum.includes('.')){
@@ -98,22 +105,26 @@ btnGrid.addEventListener('click', e => {
             if(displayedNum.length <= 1){
                 primaryScreen.textContent = '0';
             } else{
-                let newDisplay = displayedNum.slice(0, -1);
-                primaryScreen.textContent = newDisplay;
+                let newValue = displayedNum.slice(0, -1);
+                primaryScreen.textContent = newValue;
             }
         }
         if(action === 'clear'){
             primaryScreen.textContent = '0';
             secondaryScreen.textContent = '';
+            numInput = null;
         }
         if(action === 'percent'){
-            console.log('percent');
+            if(previousKey === 'number'){
+                const currentValue = parseFloat(primaryScreen.textContent);
+                primaryScreen.textContent = (currentValue / 100).toString();
+            }
         }
         if(action === 'equals'){
             // calculate result when previous data key is not equals and operation not null
             if(previousKey != 'equals' && operation){
-                num1 = numInput;
-                num2 = displayedNum;
+                const num1 = numInput;
+                const num2 = displayedNum;
                 primaryScreen.textContent = operate(operation, num1, num2);
             }
             btnGrid.dataset.previousKeyType = 'equals';
