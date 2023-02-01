@@ -106,3 +106,9 @@ btnGrid.addEventListener('click', e => {
         }
     }
 });
+
+document.addEventListener('keyup', (e) => {
+    if(!Number.isNaN(+e.key)){
+        console.log(e.key);
+    }
+});
