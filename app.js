@@ -108,7 +108,22 @@ btnGrid.addEventListener('click', e => {
 });
 
 document.addEventListener('keyup', (e) => {
-    if(!Number.isNaN(+e.key)){
-        console.log(e.key);
+    const keyEvent = e.key;
+    const operatorObject = {
+        '+' : 'add',
+        '-' : 'subtract',
+        '/' : 'divide',
+        '*' : 'multiply',
+        '.' : 'decimal',
+        'Enter' : 'equals',
+        '%' : 'percent',
+        'Backspace' : 'del',
+        'Delete' : 'clear'
+    };
+    if(!Number.isNaN(+keyEvent) && keyEvent != ' '){
+        document.getElementById(`num-${keyEvent}`).click();
+    } 
+    else if(keyEvent in operatorObject){
+        document.getElementById(`${operatorObject[keyEvent]}`).click();
     }
 });
