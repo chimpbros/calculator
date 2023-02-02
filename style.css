@@ -3,6 +3,7 @@ body{
     margin: 0;
     box-sizing: border-box;
     background-color: #ECE4DB;
+    font-family: 'Libre Franklin', sans-serif;
 }
 
 .btn {
@@ -16,8 +17,8 @@ body{
 }
 
 img {
-    height: 1rem;
-    width: 1rem;
+    height: 1.5rem;
+    width: 1.5rem;
 }
 
 .btn-grid {
@@ -81,4 +82,24 @@ img {
 
 .btn:hover {
     background-color: #FAE1DD;
+}
+
+footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 15vh;
+    gap: 10px;
+}
+
+#copyright {
+    font-size: 1rem;
+}
+
+#github {
+    transition: transform 100ms;
+}
+
+#github:hover {
+    transform: scale(1.3);
 }
